@@ -24,13 +24,14 @@ def user(request):
 def userform(request):
     userform = UserForm()
     if request.method == 'POST':
-        name = request.POST.get("name", "Undefined")
-        age = request.POST.get("age", 1)
-        user = {"name": name, "age": age}
-        data = {"user":user}
-        return render(request, "user.html", context=data)
-    else:
-        return render(request, "userform.html", {"form": userform})
+        userform = UserForm(request.POST)
+        if userform.is_valid():
+            name = userform.cleaned_data["name"]
+            age = userform.cleaned_data["age"]
+            user = {"name": name, "age": age}
+            data = {"user":user}
+            return render(request, "user.html", context=data)
+    return render(request, "userform.html", {"form": userform})
     
     
 
